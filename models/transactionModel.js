@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const transactionSchema = new mongoose.Schema({
     userid: {
         type: String,
-        require: true
+        required: true
     },
     amount: {
         type: Number,
