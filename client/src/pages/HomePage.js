@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Modal, Input, Select, message, Table, DatePicker } from 'antd';
+import { UnorderedListOutlined, AreaChartOutlined } from '@ant-design/icons'
 import Layout from '../components/Layout/Layout';
 import Spinner from '../components/Spinner';
 import axios from 'axios';
 import moment from 'moment'
+import Analytics from '../components/Analytics';
 const { RangePicker } = DatePicker;
 
 const HomePage = () => {
@@ -13,6 +15,8 @@ const HomePage = () => {
     const [frequency, setFrequency] = useState('7');
     const [selectedDate, setSelectedDate] = useState([]);
     const [type, setType] = useState('all')
+    const [viewData, setViewData] = useState("table");
+
 
     // Table columns
     const columns = [{
@@ -104,12 +108,26 @@ const HomePage = () => {
                     }
 
                 </div>
+
+                <div className='switch-icons'>
+                    <UnorderedListOutlined className={`mx-2 ${viewData === "table" ? "active-icon" : "inactive-icon"
+                        }`} onClick={() => setViewData('table')} />
+                    <AreaChartOutlined className={`mx-2 ${viewData === "analytics" ? "active-icon" : "inactive-icon"
+                        }`} onClick={() => setViewData('analytics')} />
+                </div>
                 <div>
-                    <button className='btn btn-primary' onClick={() => setShowModal(true)}>Add new</button>
+                    <button
+                        className="btn btn-primary"
+                        onClick={() => setShowModal(true)}
+                    >
+                        Add New
+                    </button>
                 </div>
             </div>
+
             <div className='content'>
-                <Table columns={columns} dataSource={allTransactions} />
+                {viewData === 'table' ? <Table columns={columns} dataSource={allTransactions} /> : <Analytics allTransactions={allTransactions} />
+                }
             </div>
             <Modal
                 title="Add transaction"
