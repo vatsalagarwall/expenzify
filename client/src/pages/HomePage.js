@@ -249,7 +249,7 @@ const HomePage = () => {
                         <Input type="text" />
                     </Form.Item>
                     <div className='d-flex justify-content-end'>
-                        <button type='submit' className='btn btn-primary'>SAVE</button>
+                        <button type='submit' className='logout-button'>SAVE</button>
                     </div>
                 </Form>
             </Modal>
