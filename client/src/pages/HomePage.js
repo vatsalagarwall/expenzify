@@ -3,6 +3,7 @@ import { Form, Modal, Input, Select, message, Table, DatePicker } from 'antd';
 import Layout from '../components/Layout/Layout';
 import Spinner from '../components/Spinner';
 import axios from 'axios';
+import moment from 'moment'
 const { RangePicker } = DatePicker;
 
 const HomePage = () => {
@@ -10,31 +11,14 @@ const HomePage = () => {
     const [loading, setLoading] = useState(false);
     const [allTransactions, setAllTransaction] = useState([]);
     const [frequency, setFrequency] = useState('7');
-
-
-
-    useEffect(() => {
-        //get all transaction
-        const getAllTransactions = async () => {
-            try {
-                const user = JSON.parse(localStorage.getItem('user'))
-                setLoading(true)
-                const res = await axios.post('/transactions/get-transaction', { userid: user._id, frequency })
-                setLoading(false)
-                setAllTransaction(res.data)
-                console.log(res.data)
-            } catch (error) {
-                console.log(error)
-                message.error("Fetch issue");
-            }
-        }
-        getAllTransactions();
-    }, [frequency])
+    const [selectedDate, setSelectedDate] = useState([]);
+    const [type, setType] = useState('all')
 
     // Table columns
     const columns = [{
         title: 'Date',
         dataIndex: 'date',
+        render: (text) => <span>{moment(text).format("YYYY-MM-DD")}</span>
     }, {
         title: 'Amount',
         dataIndex: 'amount',
@@ -50,6 +34,27 @@ const HomePage = () => {
     }, {
         title: 'Actions',
     }];
+
+    useEffect(() => {
+        //get all transaction
+        const getAllTransactions = async () => {
+            try {
+                const user = JSON.parse(localStorage.getItem('user'));
+                setLoading(true);
+                const res = await axios.post('/transactions/get-transaction', {
+                    userid: user._id, frequency, selectedDate, type
+                });
+                setLoading(false)
+                setAllTransaction(res.data)
+                console.log(res.data)
+            } catch (error) {
+                console.log(error)
+                message.error("Fetch issue");
+            }
+        }
+        getAllTransactions();
+    }, [frequency, selectedDate, type])
+
 
 
     // Form handling
@@ -81,6 +86,22 @@ const HomePage = () => {
                         <Select.Option value="365">Last 1 year</Select.Option>
                         <Select.Option value="custom">Custom</Select.Option>
                     </Select>
+                    {
+                        frequency === 'custom' && <RangePicker value={selectedDate} onChange={(values) => setSelectedDate(values)} />
+                    }
+
+                </div>
+
+                <div>
+                    <h6>Select Type</h6>
+                    <Select value={type} onChange={(values) => setType(values)}>
+                        <Select.Option value="all">All</Select.Option>
+                        <Select.Option value="income">Income</Select.Option>
+                        <Select.Option value="expense">Expense</Select.Option>
+                    </Select>
+                    {
+                        frequency === 'custom' && <RangePicker value={selectedDate} onChange={(values) => setSelectedDate(values)} />
+                    }
 
                 </div>
                 <div>
