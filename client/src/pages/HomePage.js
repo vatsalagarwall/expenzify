@@ -1,32 +1,35 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Modal, Input, Select, message, Table } from 'antd';
+import { Form, Modal, Input, Select, message, Table, DatePicker } from 'antd';
 import Layout from '../components/Layout/Layout';
 import Spinner from '../components/Spinner';
 import axios from 'axios';
+const { RangePicker } = DatePicker;
 
 const HomePage = () => {
     const [showModal, setShowModal] = useState(false);
     const [loading, setLoading] = useState(false);
     const [allTransactions, setAllTransaction] = useState([]);
+    const [frequency, setFrequency] = useState('7');
 
 
-    //get all transaction
-    const getAllTransactions = async () => {
-        try {
-            const user = JSON.parse(localStorage.getItem('user'))
-            setLoading(true)
-            const res = await axios.post('/transactions/get-transaction', { userid: user._id })
-            setLoading(false)
-            setAllTransaction(res.data)
-            console.log(res.data)
-        } catch (error) {
-            console.log(error)
-            message.error("Fetch issue");
-        }
-    }
+
     useEffect(() => {
+        //get all transaction
+        const getAllTransactions = async () => {
+            try {
+                const user = JSON.parse(localStorage.getItem('user'))
+                setLoading(true)
+                const res = await axios.post('/transactions/get-transaction', { userid: user._id, frequency })
+                setLoading(false)
+                setAllTransaction(res.data)
+                console.log(res.data)
+            } catch (error) {
+                console.log(error)
+                message.error("Fetch issue");
+            }
+        }
         getAllTransactions();
-    }, [])
+    }, [frequency])
 
     // Table columns
     const columns = [{
@@ -70,7 +73,16 @@ const HomePage = () => {
         <Layout>
             {loading && <Spinner />}
             <div className='filters'>
-                <div>Range Filters</div>
+                <div>
+                    <h6>Select Frequency</h6>
+                    <Select value={frequency} onChange={(value) => setFrequency(value)}>
+                        <Select.Option value="7">Last 7 days</Select.Option>
+                        <Select.Option value="30">Last 30 days</Select.Option>
+                        <Select.Option value="365">Last 1 year</Select.Option>
+                        <Select.Option value="custom">Custom</Select.Option>
+                    </Select>
+
+                </div>
                 <div>
                     <button className='btn btn-primary' onClick={() => setShowModal(true)}>Add new</button>
                 </div>

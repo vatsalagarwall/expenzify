@@ -1,9 +1,16 @@
 const transactionModel = require("../models/transactionModel")
-
+const moment = require('moment')
 
 const getAllTransactions = async (req, res) => {
     try {
-        const transactions = await transactionModel.find({ userid: req.body.userid })
+        const { frequency } = req.body
+        const transactions = await transactionModel.find({
+            date: {
+                $gt: moment().subtract(Number(frequency), "d").toDate(),
+            },
+            userid: req.body.userid
+        })
+
         res.status(200).json(transactions)
     } catch (error) {
         console.log(error);
