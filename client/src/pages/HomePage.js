@@ -45,7 +45,7 @@ const HomePage = () => {
                     setEditable(record)
                     setShowModal(true)
                 }} />
-                <DeleteOutlined className='mx-2' />
+                <DeleteOutlined className='mx-2' onClick={() => handleDelete(record)} />
 
             </div>
         )
@@ -71,6 +71,20 @@ const HomePage = () => {
         getAllTransactions();
     }, [frequency, selectedDate, type])
 
+
+    //delete handler
+    const handleDelete = async (record) => {
+        try {
+            setLoading(true)
+            await axios.post("/transactions/delete-transaction", { transactionId: record._id })
+            setLoading(false)
+            message.success("Transaction Deleted")
+        } catch (error) {
+            setLoading(false)
+            console.log(error)
+            message.error("Unable To Delete")
+        }
+    }
 
 
     // Form handling
