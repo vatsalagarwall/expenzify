@@ -41,11 +41,53 @@ const HomePage = () => {
         title: 'Actions',
         render: (text, record) => (
             <div>
-                <EditOutlined onClick={() => {
+                <svg
+                    style={{ cursor: 'pointer' }}
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="lucide lucide-pencil"
+                    onClick={() => {
+                        setEditable(record);
+                        setShowModal(true);
+                    }}
+                >
+                    <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" />
+                    <path d="m15 5 4 4" />
+                </svg>
+
+                {/* <EditOutlined onClick={() => {
                     setEditable(record)
                     setShowModal(true)
-                }} />
-                <DeleteOutlined className='mx-2' onClick={() => handleDelete(record)} />
+                }} /> */}
+                <svg
+                    style={{ cursor: 'pointer', marginLeft: '18px' }}
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="lucide lucide-trash-2"
+                    onClick={() => handleDelete(record)}
+                >
+                    <path d="M3 6h18" />
+                    <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                    <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                    <line x1="10" y1="11" x2="10" y2="17" />
+                    <line x1="14" y1="11" x2="14" y2="17" />
+                </svg>
+
+                {/* <DeleteOutlined className='mx-2' onClick={() => handleDelete(record)} /> */}
 
             </div>
         )
@@ -110,7 +152,7 @@ const HomePage = () => {
             }
             setShowModal(false);
             setEditable(null)
-            // getAllTransactions(); // Refresh transactions list 
+            // getAllTransactions(); // Refresh transactions list
         } catch (error) {
             setLoading(false);
             message.error("Failed to add transaction");
@@ -137,7 +179,7 @@ const HomePage = () => {
 
                 <div>
                     <h6>Select Type</h6>
-                    <Select value={type} onChange={(values) => setType(values)}>
+                    <Select value={type} onChange={(values) => setType(values)} style={{ width: "100px" }}>
                         <Select.Option value="all">All</Select.Option>
                         <Select.Option value="income">Income</Select.Option>
                         <Select.Option value="expense">Expense</Select.Option>
@@ -156,7 +198,7 @@ const HomePage = () => {
                 </div>
                 <div>
                     <button
-                        className="btn btn-primary"
+                        className="logout-button"
                         onClick={() => setShowModal(true)}
                     >
                         Add New
@@ -216,3 +258,5 @@ const HomePage = () => {
 };
 
 export default HomePage;
+
+
