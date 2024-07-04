@@ -1,0 +1,28 @@
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.filters {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.filter {
+  display: flex;
+  align-items: center;
+}
+
+.switch-icons {
+  display: flex;
+  align-items: center;
+}
+
+.icon {
+  font-size: 20px;
+  cursor: pointer;
+}
